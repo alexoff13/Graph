@@ -18,7 +18,12 @@ int main() {
     graph.addArc(Arc(Vertex(2), Vertex(3)));
 
     graph.print();
-    std::cout << "  ---" << std::endl;
+    std::cout << std::endl << std::endl;
+
+    graph.traversal(Vertex(2));
+
+    graph.print();
+    std::cout << std::endl << std::endl;
 
     graph.deleteVertex(Vertex(2));
 

@@ -1,4 +1,28 @@
 #include "graph.h"
+#include <stack>
+
+
+void Graph::unmarkAll() {
+    Arc* runner = head;
+    while (runner == head || runner != nullptr) {
+        runner->vertex1.isMarked = runner->vertex2.isMarked = false;
+        runner = runner->next;
+    }
+}
+
+
+void Graph::markVertex(Vertex vertex) {
+    Arc* runner = head;
+    while (runner == head || runner != nullptr) {
+        if (runner->vertex1 == vertex) {
+            runner->vertex1.isMarked = true;
+        }
+        if (runner->vertex2 == vertex) {
+            runner->vertex2.isMarked = true;
+        }
+        runner = runner->next;
+    }
+}
 
 
 Graph::Graph() {
@@ -112,7 +136,6 @@ bool Graph::searchArc(Arc arc) {
     return false;
 }
 
-
 bool Graph::searchVertex(Vertex vertex) {
     Arc* runner = head;
     while (runner == head || runner != nullptr) {
@@ -136,4 +159,63 @@ void Graph::print() {
         }
     }
 }
+
+void Graph::traversal(Vertex vertex) {
+    if (!searchVertex(vertex)) {
+        std::cout << "This vertex does not exists";
+    }
+    unmarkAll();
+
+    // S: семейство дуг = пусто
+    std::stack<Arc> arcs;
+    //
+    markVertex(vertex);
+
+    // S <= ИСХОД(q)
+    Arc* runner = head;
+    while (runner == head || runner != nullptr) {
+        if (runner->includes(vertex)) {
+            arcs.push(*runner);
+        }
+    }
+
+    while (!arcs.empty()) {
+
+    }
+//
+//    int v,flag;
+//    visited[v]=1;
+//    arcs.push(v);
+//    cout<<v<<" ";
+//    do
+//    {
+//        flag=0;
+//        temp=list[v];
+//        while(temp!=NULL)
+//        {
+//            if(visited[temp->info]==0)
+//            {
+//                cout<<temp->info<<" ";
+//                visited[temp->info]=1;
+//                arcs.push(temp->info);
+//                v=temp->info;
+//                flag=1;
+//                break;
+//            }
+//
+//            temp=temp->next;
+//        }
+//
+//        if(!arcs.empty() && flag == 0 )
+//        {
+//            v=arcs.top();
+//            arcs.pop();
+//
+//        }
+//
+//    }while(!arcs.empty());
+}
+
+
+
 

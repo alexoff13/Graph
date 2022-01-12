@@ -7,6 +7,10 @@ class Graph {
     Arc* head = nullptr;
     Arc* tail = nullptr;
 
+private:
+    void unmarkAll();
+    void markVertex(Vertex);
+
 public:
     Graph();
     ~Graph();
@@ -16,6 +20,7 @@ public:
     bool searchArc(Arc);
     bool searchVertex(Vertex);
     void print();
+    void traversal(Vertex vertex);
 };
 
 
