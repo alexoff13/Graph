@@ -9,6 +9,7 @@ struct Vertex {
 
     explicit Vertex(int, bool = false);
     bool operator==(Vertex) const;
+    bool operator!=(Vertex) const;
     bool operator>(Vertex) const;
     bool operator<(Vertex) const;
     friend std::ostream& operator<<(std::ostream&, const Vertex&);

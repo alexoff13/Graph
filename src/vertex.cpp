@@ -12,6 +12,11 @@ bool Vertex::operator==(Vertex other) const {
 }
 
 
+bool Vertex::operator!=(Vertex other) const {
+    return vertex != other.vertex;
+}
+
+
 bool Vertex::operator>(Vertex other) const {
     return vertex > other.vertex;
 }
@@ -20,7 +25,6 @@ bool Vertex::operator>(Vertex other) const {
 bool Vertex::operator<(Vertex other) const {
     return vertex < other.vertex;
 }
-
 
 std::ostream &operator<<(std::ostream &out, const Vertex &other) {
     out << other.vertex << (other.isMarked ? "*" : "");

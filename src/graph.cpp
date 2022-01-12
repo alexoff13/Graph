@@ -1,8 +1,7 @@
 #include "graph.h"
-#include <stack>
 
 
-void Graph::unmarkAll() {
+void Graph::unmarkAllVertices() {
     Arc* runner = head;
     while (runner == head || runner != nullptr) {
         runner->vertex1.isMarked = runner->vertex2.isMarked = false;
@@ -136,6 +135,7 @@ bool Graph::searchArc(Arc arc) {
     return false;
 }
 
+
 bool Graph::searchVertex(Vertex vertex) {
     Arc* runner = head;
     while (runner == head || runner != nullptr) {
@@ -160,60 +160,49 @@ void Graph::print() {
     }
 }
 
-void Graph::traversal(Vertex vertex) {
+
+void Graph::depthTraversal(Vertex vertex) {
     if (!searchVertex(vertex)) {
         std::cout << "This vertex does not exists";
     }
-    unmarkAll();
+    unmarkAllVertices();
 
-    // S: семейство дуг = пусто
-    std::stack<Arc> arcs;
-    //
+    ArcStack arcs;
+    std::cout << "Vertices were visited in the following order: " << vertex;
+    vertexTraversal(arcs, vertex);
+    std::cout << std::endl;
+    unmarkAllVertices();
+}
+
+
+void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex) {
+    // Marking the temporary vertex
     markVertex(vertex);
+    vertex.isMarked = true;
 
-    // S <= ИСХОД(q)
+    // Pushing all arcs outgoing from the temporary vertex
     Arc* runner = head;
     while (runner == head || runner != nullptr) {
         if (runner->includes(vertex)) {
-            arcs.push(*runner);
+            arcs.push(runner);
+        }
+        runner = runner->next;
+    }
+
+    // Changing the temporary vertex
+    while (!arcs.empty()) {
+        if (arcs.top()->vertex1 != vertex && !arcs.top()->vertex1.isMarked) {
+            vertex = arcs.top()->vertex1;
+        }
+        if (arcs.top()->vertex2 != vertex && !arcs.top()->vertex2.isMarked) {
+            vertex = arcs.top()->vertex2;
+        }
+        arcs.pop();
+        if (!vertex.isMarked) {
+            std::cout << ", " << vertex;
+            vertexTraversal(arcs, vertex);
         }
     }
-
-    while (!arcs.empty()) {
-
-    }
-//
-//    int v,flag;
-//    visited[v]=1;
-//    arcs.push(v);
-//    cout<<v<<" ";
-//    do
-//    {
-//        flag=0;
-//        temp=list[v];
-//        while(temp!=NULL)
-//        {
-//            if(visited[temp->info]==0)
-//            {
-//                cout<<temp->info<<" ";
-//                visited[temp->info]=1;
-//                arcs.push(temp->info);
-//                v=temp->info;
-//                flag=1;
-//                break;
-//            }
-//
-//            temp=temp->next;
-//        }
-//
-//        if(!arcs.empty() && flag == 0 )
-//        {
-//            v=arcs.top();
-//            arcs.pop();
-//
-//        }
-//
-//    }while(!arcs.empty());
 }
 
 

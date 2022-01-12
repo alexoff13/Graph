@@ -1,6 +1,10 @@
 #ifndef GRAPH_GRAPH_H
 #define GRAPH_GRAPH_H
 #include "arc.h"
+#include <stack>
+
+
+using ArcStack = std::stack<Arc*>;
 
 
 class Graph {
@@ -8,8 +12,9 @@ class Graph {
     Arc* tail = nullptr;
 
 private:
-    void unmarkAll();
+    void unmarkAllVertices();
     void markVertex(Vertex);
+    void vertexTraversal(ArcStack&, Vertex);
 
 public:
     Graph();
@@ -20,7 +25,7 @@ public:
     bool searchArc(Arc);
     bool searchVertex(Vertex);
     void print();
-    void traversal(Vertex vertex);
+    void depthTraversal(Vertex vertex);
 };
 
 
