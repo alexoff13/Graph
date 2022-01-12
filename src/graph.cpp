@@ -163,7 +163,8 @@ void Graph::print() {
 
 void Graph::depthTraversal(Vertex vertex) {
     if (!searchVertex(vertex)) {
-        std::cout << "This vertex does not exists";
+        std::cout << "This vertex does not exists" << std::endl;
+        return;
     }
     unmarkAllVertices();
 
