@@ -163,7 +163,7 @@ void Graph::print() {
 
 void Graph::depthTraversal(Vertex vertex) {
     if (!searchVertex(vertex)) {
-        std::cout << "This vertex does not exists" << std::endl;
+        std::cout << "This id does not exists" << std::endl;
         return;
     }
     unmarkAllVertices();
@@ -177,11 +177,11 @@ void Graph::depthTraversal(Vertex vertex) {
 
 
 void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex) {
-    // Marking the temporary vertex
+    // Marking the temporary id
     markVertex(vertex);
     vertex.isMarked = true;
 
-    // Pushing all arcs outgoing from the temporary vertex
+    // Pushing all arcs outgoing from the temporary id
     Arc* runner = head;
     while (runner == head || runner != nullptr) {
         if (runner->includes(vertex)) {
@@ -190,7 +190,7 @@ void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex) {
         runner = runner->next;
     }
 
-    // Changing the temporary vertex
+    // Changing the temporary id
     while (!arcs.empty()) {
         if (arcs.top()->vertex1 != vertex && !arcs.top()->vertex1.isMarked) {
             vertex = arcs.top()->vertex1;
@@ -205,7 +205,3 @@ void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex) {
         }
     }
 }
-
-
-
-

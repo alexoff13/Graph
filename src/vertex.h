@@ -5,7 +5,7 @@
 
 struct Vertex {
     bool isMarked = false;
-    int vertex;
+    int id;
 
     explicit Vertex(int, bool = false);
     bool operator==(Vertex) const;

@@ -1,32 +1,33 @@
 #include "vertex.h"
 
 
-Vertex::Vertex(int vertex, bool isMarked) {
-    this->vertex = vertex;
+Vertex::Vertex(int id, bool isMarked) {
+    this->id = id;
     this->isMarked = isMarked;
 }
 
 
 bool Vertex::operator==(Vertex other) const {
-    return vertex == other.vertex;
+    return id == other.id;
 }
 
 
 bool Vertex::operator!=(Vertex other) const {
-    return vertex != other.vertex;
+    return id != other.id;
 }
 
 
 bool Vertex::operator>(Vertex other) const {
-    return vertex > other.vertex;
+    return id > other.id;
 }
 
 
 bool Vertex::operator<(Vertex other) const {
-    return vertex < other.vertex;
+    return id < other.id;
 }
 
+
 std::ostream &operator<<(std::ostream &out, const Vertex &other) {
-    out << other.vertex << (other.isMarked ? "*" : "");
+    out << other.id << (other.isMarked ? "*" : "");
     return out;
 }

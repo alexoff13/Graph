@@ -30,5 +30,3 @@ std::ostream &operator<<(std::ostream &out, const Arc &other) {
     out << other.vertex1 << " --- " << other.vertex2;
     return out;
 }
-
-
