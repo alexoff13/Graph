@@ -345,7 +345,7 @@ void Graph::findEulerCycle(const Vertex& vertex) {
         return;
     }
 
-    ArcStack arcs;
+    ArcQueue arcs;
     Arc* currentArc;
     Vertex currentVertex = vertex;
     int passes = 0;
@@ -365,8 +365,8 @@ void Graph::findEulerCycle(const Vertex& vertex) {
             // Just pass current arc. On the next iteration will be taken the next arc
             } else {
                 addArc(*currentArc);
-                delete currentArc;
                 ++passes;
+                delete currentArc;
             }
         }
     }
@@ -375,10 +375,10 @@ void Graph::findEulerCycle(const Vertex& vertex) {
     std::cout << "Euler cycle: " << vertex;
     currentVertex = vertex;
     while (!arcs.empty()) {
-        currentVertex = arcs.top()->vertex1 != currentVertex ? arcs.top()->vertex1 : arcs.top()->vertex2;
+        currentVertex = arcs.front()->vertex1 != currentVertex ? arcs.front()->vertex1 : arcs.front()->vertex2;
         std::cout << " --- " << currentVertex;
-        addArc(*arcs.top());
-        delete arcs.top();
+        addArc(*arcs.front());
+        delete arcs.front();
         arcs.pop();
     }
     std::cout << std::endl;

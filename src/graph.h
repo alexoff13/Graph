@@ -6,15 +6,16 @@
 
 
 using ArcStack = std::stack<Arc*>;
+using ArcQueue = std::queue<Arc*>;
 using VertexQueue = std::queue<Vertex>;
 
 
 class Graph {
+private:
     Arc* head = nullptr;
     Arc* tail = nullptr;
 
-private:
-    int getIncidentCount(const Vertex& vertex);
+    int getIncidentCount(const Vertex&);
     void unmarkAllVertices();
     void markVertex(const Vertex&);
     void vertexTraversal(ArcStack&, Vertex, VertexQueue*);
