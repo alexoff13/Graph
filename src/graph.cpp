@@ -1,18 +1,34 @@
 #include "graph.h"
 
 
+int Graph::getIncidentCount(const Vertex& vertex) {
+    int count = 0;
+    Arc* runner = head;
+    while (*this && runner == head || runner != nullptr) {
+        if (runner->vertex1 == vertex) {
+            ++count;
+        }
+        if (runner->vertex2 == vertex) {
+            ++count;
+        }
+        runner = runner->next;
+    }
+    return count;
+}
+
+
 void Graph::unmarkAllVertices() {
     Arc* runner = head;
-    while (runner == head || runner != nullptr) {
+    while (*this && runner == head || runner != nullptr) {
         runner->vertex1.isMarked = runner->vertex2.isMarked = false;
         runner = runner->next;
     }
 }
 
 
-void Graph::markVertex(Vertex vertex) {
+void Graph::markVertex(const Vertex& vertex) {
     Arc* runner = head;
-    while (runner == head || runner != nullptr) {
+    while (*this && runner == head || runner != nullptr) {
         if (runner->vertex1 == vertex) {
             runner->vertex1.isMarked = true;
         }
@@ -24,8 +40,115 @@ void Graph::markVertex(Vertex vertex) {
 }
 
 
+bool Graph::isConnected() {
+    // If graph is empty, it cannot be connected
+    if (head == nullptr) {
+        return false;
+    }
+    // If graph has only a loop arc, it's connected
+    if (head == tail && head->vertex1 == head->vertex2) {
+        return true;
+    }
+
+    auto firstVertexGroup = VertexQueue();
+    depthTraversal(head->vertex1, &firstVertexGroup);
+
+    // Making new graph from found vertex group
+    Graph graph;
+    while (!firstVertexGroup.empty()) {
+        graph.addArc(Arc(Vertex(firstVertexGroup.front()), Vertex(firstVertexGroup.front())));
+        firstVertexGroup.pop();
+    }
+
+    // Checking that there's no else vertex groups
+    Arc* runner = head;
+    while (runner == head || runner != nullptr) {
+        if (!graph.searchVertex(runner->vertex1) || !graph.searchVertex(runner->vertex2)) {
+            return false;
+        }
+        runner = runner->next;
+    }
+
+    return true;
+}
+
+
+bool Graph::isEuler() {
+    if (!isConnected()) {
+        return false;
+    }
+    unmarkAllVertices();
+
+    Arc* runner = head;
+    while (runner == head || runner != nullptr) {
+        if (!runner->vertex1.isMarked) {
+            if (getIncidentCount(runner->vertex1) % 2) {
+                return false;
+            }
+            markVertex(runner->vertex1);
+        }
+        if (!runner->vertex2.isMarked) {
+            if (getIncidentCount(runner->vertex2) % 2) {
+                return false;
+            }
+            markVertex(runner->vertex2);
+        }
+        runner = runner->next;
+    }
+
+    unmarkAllVertices();
+    return true;
+}
+
+
+Arc* Graph::getIncidentArc(const Vertex &vertex, int passes) {
+    Arc* runner = head;
+    Arc* incidentArc = nullptr;
+    while (head != nullptr && runner == head || runner != nullptr) {
+        if (runner->includes(vertex)) {
+            incidentArc = runner;
+            if (passes == 0) {
+                return incidentArc;
+            }
+            --passes;
+        }
+        runner = runner->next;
+    }
+    return incidentArc;
+}
+
+
+bool Graph::areVerticesConnected(const Vertex &vertex1, const Vertex &vertex2) {
+    VertexQueue traversal;
+    depthTraversal(vertex1, &traversal);
+    while (!traversal.empty()) {
+        if (traversal.front() == vertex2) {
+            return true;
+        }
+        traversal.pop();
+    }
+    return false;
+}
+
+
 Graph::Graph() {
     head = tail = nullptr;
+}
+
+
+Graph::Graph(Graph& other) {
+    if (other.head != nullptr) {
+        head = new Arc(*other.head);
+        Arc* runner = head;
+        Arc* otherRunner = other.head->next;
+        while (otherRunner != nullptr) {
+            runner->next = new Arc(*otherRunner);
+            runner->next->prev = runner;
+            runner = runner->next;
+            otherRunner = otherRunner->next;
+        }
+        tail = runner;
+    }
 }
 
 
@@ -38,17 +161,17 @@ Graph::~Graph() {
 }
 
 
-bool Graph::addArc(Arc arc) {
+bool Graph::addArc(const Arc& arc) {
     Arc* newArc = new Arc(arc);
     newArc->normalize();
 
     if (head == nullptr) {
         head = tail = newArc;
-        return true;
     } else {
-        if (searchArc(*newArc)) {
-            return false;
-        }
+        // This block removes adding duplicate arc
+        // if (searchArc(*newArc)) {
+        //     return false;
+        // }
 
         Arc *current = head;
         while (current == head || current != nullptr) {
@@ -72,21 +195,21 @@ bool Graph::addArc(Arc arc) {
         tail->next = newArc;
         newArc->prev = tail;
         tail = newArc;
-
-        return true;
     }
+    return true;
 }
 
 
-bool Graph::deleteArc(Arc arc) {
+bool Graph::deleteArc(const Arc& arc) {
     Arc* current = head;
 
-    if (head == tail && *head == arc) {
+    if (*this && head == tail && *head == arc) {
         delete head;
         head = tail = nullptr;
+        return true;
     }
 
-    while (current == head || current != nullptr) {
+    while (*this && current == head || current != nullptr) {
         if (*current == arc) {
             if (current == head) {
                 head = current->next;
@@ -108,10 +231,10 @@ bool Graph::deleteArc(Arc arc) {
 }
 
 
-bool Graph::deleteVertex(Vertex vertex) {
+bool Graph::deleteVertex(const Vertex& vertex) {
     bool isFound = false;
     while (searchVertex(vertex)) {
-        Arc *runner = head;
+        Arc* runner = head;
         while (runner == head || runner != nullptr) {
             if (runner->includes(vertex)) {
                 isFound = deleteArc(Arc(runner->vertex1, runner->vertex2));
@@ -124,9 +247,9 @@ bool Graph::deleteVertex(Vertex vertex) {
 }
 
 
-bool Graph::searchArc(Arc arc) {
+bool Graph::searchArc(const Arc& arc) {
     Arc* runner = head;
-    while (runner == head || runner != nullptr) {
+    while (*this && runner == head || runner != nullptr) {
         if (*runner == arc) {
             return true;
         }
@@ -136,15 +259,8 @@ bool Graph::searchArc(Arc arc) {
 }
 
 
-bool Graph::searchVertex(Vertex vertex) {
-    Arc* runner = head;
-    while (runner == head || runner != nullptr) {
-        if (runner->vertex1 == vertex || runner->vertex2 == vertex) {
-            return true;
-        }
-        runner = runner->next;
-    }
-    return false;
+bool Graph::searchVertex(const Vertex& vertex) {
+    return getIncidentCount(vertex) > 0;
 }
 
 
@@ -161,22 +277,30 @@ void Graph::print() {
 }
 
 
-void Graph::depthTraversal(Vertex vertex) {
+void Graph::depthTraversal(const Vertex& vertex, VertexQueue* buffer) {
     if (!searchVertex(vertex)) {
-        std::cout << "This id does not exists" << std::endl;
+        if (buffer == nullptr) {
+            std::cout << "This vertex does not exists" << std::endl;
+        }
         return;
     }
     unmarkAllVertices();
 
     ArcStack arcs;
-    std::cout << "Vertices were visited in the following order: " << vertex;
-    vertexTraversal(arcs, vertex);
-    std::cout << std::endl;
+    if (buffer == nullptr) {
+        std::cout << "Vertices were visited in the following order: " << vertex;
+    } else {
+        buffer->push(Vertex(vertex));
+    }
+    vertexTraversal(arcs, vertex, buffer);
+    if (buffer == nullptr) {
+        std::cout << std::endl;
+    }
     unmarkAllVertices();
 }
 
 
-void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex) {
+void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex, VertexQueue* buffer) {
     // Marking the temporary id
     markVertex(vertex);
     vertex.isMarked = true;
@@ -200,8 +324,67 @@ void Graph::vertexTraversal(ArcStack &arcs, Vertex vertex) {
         }
         arcs.pop();
         if (!vertex.isMarked) {
-            std::cout << ", " << vertex;
-            vertexTraversal(arcs, vertex);
+            if (buffer == nullptr) {
+                std::cout << ", " << vertex;
+            } else {
+                buffer->push(Vertex(vertex));
+            }
+            vertexTraversal(arcs, vertex, buffer);
         }
     }
+}
+
+
+void Graph::findEulerCycle(const Vertex& vertex) {
+    if (!searchVertex(vertex)) {
+        std::cout << "This vertex does not exists, so cycle cannot be found" << std::endl;
+        return;
+    }
+    if (!isEuler()) {
+        std::cout << "There are no euler cycles" << std::endl;
+        return;
+    }
+
+    ArcStack arcs;
+    Arc* currentArc;
+    Vertex currentVertex = vertex;
+    int passes = 0;
+    while (*this) {
+        Arc* currentArcPointer = getIncidentArc(currentVertex, passes);
+        if (currentArcPointer != nullptr) {
+            currentArc = new Arc(*currentArcPointer);
+            deleteArc(*currentArc);
+
+            // If there are no else incident arcs, or vertices are still connected, we choose this arc
+            if (getIncidentCount(currentVertex) - passes == 0 ||
+                areVerticesConnected(currentArc->vertex1, currentArc->vertex2)) {
+                arcs.push(currentArc);
+
+                currentVertex = currentArc->vertex1 != currentVertex ? currentArc->vertex1 : currentArc->vertex2;
+                passes = 0;
+            // Just pass current arc. On the next iteration will be taken the next arc
+            } else {
+                addArc(*currentArc);
+                delete currentArc;
+                ++passes;
+            }
+        }
+    }
+
+    // Unpacking arcs, printing and adding back
+    std::cout << "Euler cycle: " << vertex;
+    currentVertex = vertex;
+    while (!arcs.empty()) {
+        currentVertex = arcs.top()->vertex1 != currentVertex ? arcs.top()->vertex1 : arcs.top()->vertex2;
+        std::cout << " --- " << currentVertex;
+        addArc(*arcs.top());
+        delete arcs.top();
+        arcs.pop();
+    }
+    std::cout << std::endl;
+}
+
+
+Graph::operator bool() const {
+    return head != nullptr;
 }

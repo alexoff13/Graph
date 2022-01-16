@@ -3,15 +3,18 @@
 #include <iostream>
 
 
-struct Vertex {
+class Vertex {
+public:
     bool isMarked = false;
     int id;
 
-    explicit Vertex(int, bool = false);
-    bool operator==(Vertex) const;
-    bool operator!=(Vertex) const;
-    bool operator>(Vertex) const;
-    bool operator<(Vertex) const;
+    explicit Vertex(int = 0, bool = false);
+    Vertex(const Vertex&);
+
+    bool operator==(const Vertex&) const;
+    bool operator!=(const Vertex&) const;
+    bool operator>(const Vertex&) const;
+    bool operator<(const Vertex&) const;
     friend std::ostream& operator<<(std::ostream&, const Vertex&);
 };
 

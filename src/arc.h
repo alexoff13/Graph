@@ -4,16 +4,18 @@
 #include "vertex.h"
 
 
-struct Arc {
+class Arc {
+public:
     Arc* prev = nullptr;
     Arc* next = nullptr;
     Vertex vertex1;
     Vertex vertex2;
 
-    Arc(const Vertex &vertex1, const Vertex &vertex2);
+    Arc(const Vertex&, const Vertex&);
+    Arc(const Arc&);
     void normalize();
-    [[nodiscard]] bool includes(Vertex) const;
-    bool operator==(Arc) const;
+    [[nodiscard]] bool includes(const Vertex&) const;
+    bool operator==(const Arc&) const;
     friend std::ostream& operator<<(std::ostream&, const Arc&);
 };
 
