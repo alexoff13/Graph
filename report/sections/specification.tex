@@ -1,0 +1,48 @@
+\section{Спецификация}
+
+
+\subsection{Поля класса Graph}
+
+
+\begin{enumerate}
+    \item \texttt{head} -- ссылка на начало двусвязного списка дуг типа \texttt{Arc*}, где \texttt{Arc} -- дуга графа;
+    \item \texttt{tail} -- ссылка на конец двусвязного списка дуг типа \texttt{Arc*}, где \texttt{Arc} -- дуга графа.
+\end{enumerate}
+
+
+\subsection{Методы класса Graph}
+
+
+\begin{enumerate}
+    \item \textbf{Конструктор} \\
+    \texttt{Graph::Graph()} -- инициализирует \texttt{head} и \texttt{tail} значением \texttt{nullptr}.
+    
+    \item \textbf{Деструктор} \\
+    \texttt{Graph::$\sim$Graph()} -- рекурсивно очищает выделенную память, начиная с \texttt{head}.
+    
+    \item \textbf{Добавление дуги} \\
+    \texttt{bool Graph::addArc(const Arc\& arc)} -- добавляет дугу \texttt{arc} в список дуг графа. Не имеет значения, в каком порядке находятся вершины в \texttt{arc}. Также допускается добавление уже существующих дуг.
+    
+    \item \textbf{Удаление дуги} \\
+    \texttt{bool Graph::deleteArc(const Arc\& arc)} -- удаляет дугу \text{arc} из списка дуг графа. Не имеет значения, в каком порядке находятся вершины в \texttt{arc}. Если дуга \texttt{arc} существует в графе, то удалится ровно одна дуга, и вернётся \texttt{true}. Если такая дуга отсутствует, то вернётся \texttt{false}.
+    
+    \item \textbf{Удаление вершины} \\
+    \texttt{bool Graph::deleteVertex(const Vertex\& vertex)} -- удаляет все дуги из списка дуг графа, которые смежны с вершиной \texttt{vertex}. Если не существует дуг, смежных с \texttt{vertex}, то ничего не удалится, и вернётся \texttt{false}. В ином случае вернётся \texttt{true}.
+
+    \item \textbf{Поиск дуги} \\
+    \texttt{bool Graph::searchArc(const Arc\& arc)} -- ищет такую же дугу, что и дуга \texttt{arc}, в списке дуг графа. Не имеет значения, в каком порядке находятся вершины в \texttt{arc}. Если такая дуга находится в списке, то возвращается \texttt{true}. В ином случае возвращается \texttt{false}.
+
+    \item \textbf{Поиск вершины} \\
+    \texttt{bool Graph::searchVertex(const Vertex\& vertex)} -- ищет любую дугу, что смежна с вершиной \texttt{vertex}, в списке дуг графа. Если такая дуга находится в списке, то возвращается \texttt{true}. В ином случае возвращается \texttt{false}.
+    
+    \item \textbf{Печать} \\
+    \texttt{void Graph::print()} -- выводит в консоль упорядоченный список дуг графа. Если граф пуст, то выводится следующее сообщение: <<\texttt{Graph is empty}>>.
+
+    \item \textbf{Обход в глубину из определённой вершины} \\
+    \texttt{void Graph::depthTraversal(const Vertex\& vertex, VertexQueue* buffer = nullptr)} -- если в \texttt{buffer} не кладется ссылка на очередь вершин, то метод выводит через запятую вершины, которые были посещены во время обхода из вершины \texttt{vertex} в порядке последовательности. В ином случае посещённые вершины сохраняются в \texttt{buffer}, и метод ничего не выводит на экран. Если вершины \texttt{vertex} не существует в графе, то выводится следующее сообщение: <<This vertex does not exists>>.
+
+    \item \textbf{Поиск эйлерова цикла из определённой вершины} \\
+    \texttt{void Graph::findEulerCycle(const Vertex\& vertex)} -- если вершина \texttt{vertex} существует в графе, сам граф является связным и каждая вершина в графе имеет четное количество смежных дуг, то выводится цепочка вершин, являющаяся одной из существующих эйлеровых циклов. Если вершины \texttt{vertex} не существует в графе, то выводится следующее сообщение: <<This vertex does not exists, so cycle cannot be found>>. Если граф не является связным или не имеет четное количество смежных дуг у каждой вершины, то выводится следующее сообщение: <<There are no euler cycles>>.
+\end{enumerate}
+
+\newpage
