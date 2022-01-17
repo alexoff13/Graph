@@ -3,6 +3,7 @@
     "workbench.editor.enablePreview": false,
     "explorer.confirmDelete": false,
     "latex-workshop.latex.clean.subfolder.enabled": true,
+    "latex-workshop.message.badbox.show": false,
     "latex-workshop.latex.autoClean.run": "onBuilt",
     "latex-workshop.latex.clean.fileTypes": [
         "*.aux",
@@ -37,14 +38,15 @@
         "editor.wordWrap": "on",
     },
     "cSpell.enabled": true,
-    "cSpell.enabledLanguageIds": [
-        "tex"
-    ],
     "cSpell.enableFiletypes": [
         "tex"
     ],
     "cSpell.language": "en,ru",
     "cSpell.words": [
-        "ПММУ"
+        "nullptr",
+        "Остроухова",
+        "эйлерова",
+        "эйлеровом",
+        "эйлеровых"
     ]
 }

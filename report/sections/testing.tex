@@ -1,4 +1,5 @@
-\section{Тестирование}
+\section{Тестирование}\label{sec:testins}
+
 
 \setlength{\parskip}{1.0ex}
 \small
@@ -37,19 +38,19 @@
     \hline
     \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
     \hline \endhead
-    Добавление в пустой граф & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: \{1, 2\}} & \img{1}\test{return: true} \\
+    Добавление в пустой граф & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: (1, 2)} & \img{1}\test{return: true} \\
     \hline
-    Добавление в непустой граф дуги, соединяющейся с уже существующей вершиной & \img{1}\test{arc: \{1, 3\}} & \img{2}\test{return: true} \\
+    Добавление в непустой граф дуги, соединяющейся с уже существующей вершиной & \img{1}\test{arc: (1, 3)} & \img{2}\test{return: true} \\
     \hline
-    Добавление в непустой граф дуги, не соединяющейся с уже существующей вершиной & \img{1}\test{arc: \{3, 4\}} & \img{3}\test{return: true} \\
+    Добавление в непустой граф дуги, не соединяющейся с уже существующей вершиной & \img{1}\test{arc: (3, 4)} & \img{3}\test{return: true} \\
     \hline
-    Добавление петли в пустой граф & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: \{1, 1\}} & \img{4}\test{return: true} \\
+    Добавление петли в пустой граф & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: (1, 1)} & \img{4}\test{return: true} \\
     \hline
-    Добавление петли в уже существующую вершину & \img{1}\test{arc: \{1, 1\}} & \img{5}\test{return: true} \\
+    Добавление петли в уже существующую вершину & \img{1}\test{arc: (1, 1)} & \img{5}\test{return: true} \\
     \hline
-    Добавление уже существующей дуги & \img{1}\test{arc: \{1, 2\}} & \img{6}\test{return: true} \\
+    Добавление уже существующей дуги & \img{1}\test{arc: (1, 2)} & \img{6}\test{return: true} \\
     \hline
-    Добавление петли, не выходящей ни из одной уже существующей вершины & \img{1}\test{arc: \{3, 3\}} & \img{7}\test{return: true} \\
+    Добавление петли, не выходящей ни из одной уже существующей вершины & \img{1}\test{arc: (3, 3)} & \img{7}\test{return: true} \\
     \hline
 \end{xltabular}
 
@@ -59,13 +60,137 @@
     \hline
     \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
     \hline \endhead
-    Удаление из пустого графа & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: \{1, 2\}} & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\return: false} \\
+    Удаление дуги из пустого графа & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: (1, 2)} & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\return: false} \\
     \hline
-    Удаление не существующей дуги из непустого графа & \img{1}\test{arc: \{1, 3\}} & \img{1}\test{return: false} \\
+    Удаление не существующей дуги из непустого графа & \img{1}\test{arc: (1, 3)} & \img{1}\test{return: false} \\
     \hline
-    Удаление существующей дуги & \img{2}\test{arc: \{1, 3\}} & \img{1}\test{return: true} \\
+    Удаление существующей дуги & \img{2}\test{arc: (1, 3)} & \img{1}\test{return: true} \\
     \hline
-    Удаление последней дуги & \img{1}\test{\\arc: \{1, 2\}} & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\return: true} \\
+    Удаление последней дуги & \img{1}\test{arc: (1, 2)} & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\return: true} \\
+    \hline
+    Удаление дуги, вершины которых не смежны ни с какой другой дугой & \img{3}\test{arc: (3, 4)} & \img{1}\test{return: true} \\
+    \hline
+    Удаление дуги, которых в графе несколько & \img{6}\test{arc: (1, 2)} & \img{1}\test{return: true} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование удаления вершины\label{tab:deletevertex-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Удаление вершины из пустого графа & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\vertex: 2} & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\return: false} \\
+    \hline
+    Удаление не существующей вершины из непустого графа & \img{1}\test{vertex: 3} & \img{1}\test{return: false} \\
+    \hline
+    Удаление существующей вершины, которая смежна ровно с одной дугой & \img{2}\test{vertex: 3} & \img{1}\test{return: true} \\
+    \hline
+    Удаление существующей вершины, которая смежна с несколькими дугами & \img{8}\test{vertex: 3} & \img{1}\test{return: true} \\
+    \hline
+    Удаление вершины, которая смежна со всеми дугами & \img{2}\test{vertex: 1} & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\return: true} \\
+    \hline
+    Удаление вершины, которая имеет петлю и смежна с другой дугой & \img{9}\test{vertex: 3} & \img{1}\test{return: true} \\
+    \hline
+    Удаление вершины, которая имеет только петлю & \img{7}\test{vertex: 3} & \img{1}\test{return: true} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование поиска дуги\label{tab:searcharc-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Поиск дуги в пустом графе & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\arc: (1, 2)} & \test{return: false} \\
+    \hline
+    Поиск не существующей дуги в непустом графе & \img{8}\test{arc: (4, 3)} & \test{return: false} \\
+    \hline
+    Поиск не повторяющейся дуги & \img{9}\test{arc: (1, 3)} & \test{return: true} \\
+    \hline
+    Поиск повторяющейся дуги & \img{6}\test{arc: (1, 2)} & \test{return: true} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование поиска вершины\label{tab:searchvertex-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Поиск вершины в пустом графе & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\vertex: 1} & \test{return: false} \\
+    \hline
+    Поиск не существующей вершины в непустом графе & \img{8}\test{vertex: 4} & \test{return: false} \\
+    \hline
+    Поиск существующей вершины, смежной с одной дугой & \img{1}\test{vertex: 2} & \test{return: true} \\
+    \hline
+    Поиск существующей вершины, смежной с несколькими дугами & \img{9}\test{vertex: 3} & \test{return: true} \\
+    \hline
+    Поиск существующей вершины, которая имеет только петлю & \img{7}\test{vertex: 3} & \test{return: true} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование печати\label{tab:print-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Печать пустого графа & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}} & \test{out: Graph is empty} \\
+    \hline
+    Печать непустого графа & \img{10} & \test{out:\\1 --- 2\\1 --- 3\\2 --- 3\\3 --- 4} \\
+    \hline
+    Печать графа, имеющего одинаковые дуги & \img{11} & \test{out:\\1 --- 2\\1 --- 2\\1 --- 3\\1 --- 3\\2 --- 3\\3 --- 4} \\
+    \hline
+    Печать графа, имеющего хотя бы одну петлю & \img{12} & \test{out:\\1 --- 2\\1 --- 3\\1 --- 3\\2 --- 2\\2 --- 3\\3 --- 4} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование обхода дуг\label{tab:deptharctraversal-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Обход дуг в пустом графе & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\vertex: 1} & \test{out: This vertex does not\\exists} \\
+    \hline
+    Обход дуг в графе, состоящем из одной дуг & \img{1}\test{vertex: 1} & \test{out: Arcs were visited in\\the following order:\\(1, 2)} \\
+    \hline
+    Обход дуг в графе, состоящем из нескольких вершин дуг & \img{8}\test{vertex: 3} & \test{out: Arcs were visited in\\the following order:\\(2, 3) (1, 2) (1, 3)} \\
+    \hline
+    Обход дуг в змееобразном графе, относительно вершины, находящейся на одном из его концов & \img{13}\test{vertex: 6} & \test{out: Arcs were visited\\in the following order:\\(5, 6) (4, 5) (3, 4)\\(2, 3) (1, 2)} \\
+    \hline
+    Обход дуг в древообразном графе, относительно вершины, являющейся нижним средним листом & \img{14}\test{vertex: 8} & \test{out: Arcs were visited\\in the following order:\\(5, 8) (5, 6) (6, 9)\\(4, 5) (4, 7) (2, 5)\\(2, 3) (1, 2)} \\
+    \hline
+    Обход дуг в более запутанном графе, начиная с самой верхней вершины & \img{15}\test{vertex: 2} & \test{out: Arcs were visited\\in the following order:\\(2, 5) (5, 8) (8, 9)\\(6, 9) (5, 6) (7, 8)\\(4, 7) (4, 5) (2, 3)\\(1, 2)} \\
+    \hline
+\end{xltabular}
+
+
+\begin{xltabular}[h]{\textwidth}{|p{0.25 \textwidth}|X|X|}
+    \caption{Тестирование поиска эйлерова цикла\label{tab:findeulercycle-testing}} \\
+    \hline
+    \textbf{Тестовая ситуация} & \textbf{Входные данные} & \textbf{Выходные данные} \\
+    \hline \endhead
+    Поиск эйлерова цикла в пустом графе & \test{graph: \{\\\tab head = nullptr;\\\tab tail = nullptr;\\\}\\vertex: 1} & \test{out: This vertex does not\\exists, so cycle cannot\\be found} \\
+    \hline
+    Поиск эйлерова цикла в несвязном графе, где не каждая вершина имеет чётное количество смежных дуг & \img{16}\test{vertex: 1} & \test{out: There are no euler\\cycles} \\
+    \hline
+    Поиск эйлерова цикла в несвязном графе, где каждая вершина имеет чётное количество смежных дуг & \img{17}\test{vertex: 1} & \test{out: There are no euler\\cycles} \\
+    \hline
+    Поиск эйлерова цикла в связном графе, где не каждая вершина имеет чётное количество смежных дуг & \img{18}\test{vertex: 1} & \test{out: There are no euler\\cycles} \\
+    \hline
+    Поиск эйлерова цикла в связном графе, где каждая вершина имеет чётное количество смежных дуг & \img{19}\test{vertex: 1} & \test{out: Euler cycle: 1 ---\\--- 2 --- 2 --- 3 --- 4 ---\\--- 5 --- 1} \\
+    \hline
+    Поиск эйлерова цикла в эйлеровом графе, где начальная точка имеет более 2-х смежных дуг & \img{19}\test{vertex: 2} & \test{out: Euler cycle: 2 ---\\--- 1 --- 5 --- 4 --- 3 ---\\--- 2 --- 2} \\
+    \hline
+    Поиск эйлерова цикла графе, состоящем из одной лишь петли & \img{4}\test{vertex: 1} & \test{out: Euler cycle: 1 ---\\--- 1} \\
+    \hline
+    Поиск эйлерова цикла графе, состоящем из одной вершины и нескольких петель & \img{20}\test{vertex: 2} & \test{out: Euler cycle: 2 ---\\--- 2 --- 2} \\
+    \hline
+    Поиск эйлерова цикла эйлеровом графе, в котором при поиске происходит отрезание друг от друга нескольких частей графа & \img{21}\test{vertex: 1} & \test{out: Euler cycle: 1 ---\\--- 6 --- 7 --- 3 --- 5 ---\\--- 7 --- 1} \\
+    \hline
+    Поиск эйлерова цикла эйлеровом графе, начиная с вершины, которые разделяет 2 цикла в графе & \img{22}\test{vertex: 7} & \test{out: Euler cycle: 7 ---\\--- 1 --- 6 --- 7 --- 3 ---\\--- 5 --- 7} \\
     \hline
 \end{xltabular}
 

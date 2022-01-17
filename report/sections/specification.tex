@@ -1,7 +1,7 @@
-\section{Спецификация}
+\section{Спецификация}\label{sec:specification}
 
 
-\subsection{Поля класса Graph}
+\subsection{Поля класса Graph}\label{subsec:fileds}
 
 
 \begin{enumerate}
@@ -10,7 +10,7 @@
 \end{enumerate}
 
 
-\subsection{Методы класса Graph}
+\subsection{Методы класса Graph}\label{subsec:methods}
 
 
 \begin{enumerate}
@@ -38,11 +38,11 @@
     \item \textbf{Печать} \\
     \texttt{void Graph::print()} -- выводит в консоль упорядоченный список дуг графа. Если граф пуст, то выводится следующее сообщение: <<\texttt{Graph is empty}>>.
 
-    \item \textbf{Обход в глубину из определённой вершины} \\
-    \texttt{void Graph::depthVertexTraversal(const Vertex\& vertex, VertexQueue* buffer = nullptr)} -- если в \texttt{buffer} не кладется ссылка на очередь вершин, то метод выводит через запятую вершины, которые были посещены во время обхода из вершины \texttt{vertex} в порядке последовательности. В ином случае посещённые вершины сохраняются в \texttt{buffer}, и метод ничего не выводит на экран. Если вершины \texttt{vertex} не существует в графе, то выводится следующее сообщение: <<This vertex does not exists>>.
+    \item \textbf{Обход дуг из определённой вершины (в глубину)} \\
+    \texttt{void Graph::depthArcTraversal(const Vertex\& vertex, ArcQueue* buffer = nullptr)} -- если в \texttt{buffer} не кладется ссылка на очередь дуг, то метод выводит через пробел дуги, которые были посещены во время обхода из вершины \texttt{vertex} в порядке последовательности (из глубины). В ином случае посещённые дуги сохраняются в \texttt{buffer}, и метод ничего не выводит на экран. Если вершины \texttt{vertex} не существует в графе, то выводится следующее сообщение: <<\texttt{This vertex does not exists}>>.
 
     \item \textbf{Поиск эйлерова цикла из определённой вершины} \\
-    \texttt{void Graph::findEulerCycle(const Vertex\& vertex)} -- если вершина \texttt{vertex} существует в графе, сам граф является связным и каждая вершина в графе имеет четное количество смежных дуг, то выводится цепочка вершин, являющаяся одной из существующих эйлеровых циклов. Если вершины \texttt{vertex} не существует в графе, то выводится следующее сообщение: <<This vertex does not exists, so cycle cannot be found>>. Если граф не является связным или не имеет четное количество смежных дуг у каждой вершины, то выводится следующее сообщение: <<There are no euler cycles>>.
+    \texttt{void Graph::findEulerCycle(const Vertex\& vertex)} -- если вершина \texttt{vertex} существует в графе, сам граф является связным и каждая вершина в графе имеет четное количество смежных дуг, то выводится цепочка вершин, являющаяся одной из существующих эйлеровых циклов. Если вершины \texttt{vertex} не существует в графе, то выводится следующее сообщение: <<\texttt{This vertex does not exists, so cycle cannot be found}>>. Если граф не является связным или не имеет четное количество смежных дуг у каждой вершины, то выводится следующее сообщение: <<\texttt{There are no euler cycles}>>.
 \end{enumerate}
 
 \newpage

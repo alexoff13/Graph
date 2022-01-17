@@ -331,7 +331,7 @@ void Graph::arcTraversal(ArcStack &arcs, Vertex vertex, ArcQueue* buffer) {
         if (arcs.top()->vertex2 != vertex && !arcs.top()->vertex2.isMarked) {
             vertex = arcs.top()->vertex2;
         }
-        if (arcs.top()->vertex1.isMarked && arcs.top()->vertex2.isMarked && !arcs.top()->isMarked) {
+        if (!arcs.top()->isMarked) {
             if (buffer == nullptr) {
                 std::cout << "(" << arcs.top()->vertex1 << ", " << arcs.top()->vertex2 << ") ";
             } else {
