@@ -27,6 +27,6 @@ bool Vertex::operator<(const Vertex& other) const {
 }
 
 std::ostream &operator<<(std::ostream &out, const Vertex &other) {
-    out << other.id << (other.isMarked ? "*" : "");
+    out << other.id;
     return out;
 }
