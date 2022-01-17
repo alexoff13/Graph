@@ -38,7 +38,9 @@ int main() {
 
     graph.print();
     std::cout << std::endl;
-    graph.depthTraversal(Vertex(1));
+    graph.depthVertexTraversal(Vertex(1));
+    std::cout << std::endl;
+    graph.depthArcTraversal(Vertex(1));
     std::cout << std::endl;
     graph.findEulerCycle(Vertex(6));
 

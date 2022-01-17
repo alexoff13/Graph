@@ -15,27 +15,30 @@ private:
     Arc* head = nullptr;
     Arc* tail = nullptr;
 
-    int getIncidentCount(const Vertex&);
+    int getIncidentCount(const Vertex &vertex);
+    void unmarkAllArcs();
     void unmarkAllVertices();
-    void markVertex(const Vertex&);
-    void vertexTraversal(ArcStack&, Vertex, VertexQueue*);
+    void markVertex(const Vertex &vertex);
+    void arcTraversal(ArcStack &arcs, Vertex vertex, ArcQueue *buffer);
+    void vertexTraversal(ArcStack &arcs, Vertex vertex, VertexQueue *buffer);
     bool isConnected();
     bool isEuler();
-    bool areVerticesConnected(const Vertex&, const Vertex&);
-    Arc* getIncidentArc(const Vertex&, int = 0);
+    bool areVerticesConnected(const Vertex &vertex1, const Vertex &vertex2);
+    Arc* getIncidentArc(const Vertex &vertex, int passes = 0);
 
 public:
     Graph();
-    Graph(Graph&);
+    Graph(Graph &other);
     ~Graph();
-    bool addArc(const Arc&);
-    bool deleteArc(const Arc&);
-    bool deleteVertex(const Vertex&);
-    bool searchArc(const Arc&);
-    bool searchVertex(const Vertex&);
+    bool addArc(const Arc &arc);
+    bool deleteArc(const Arc &arc);
+    bool deleteVertex(const Vertex &vertex);
+    bool searchArc(const Arc &arc);
+    bool searchVertex(const Vertex &arc);
     void print();
-    void depthTraversal(const Vertex&, VertexQueue* = nullptr);
-    void findEulerCycle(const Vertex&);
+    void depthArcTraversal(const Vertex &vertex, ArcQueue *buffer = nullptr);
+    void depthVertexTraversal(const Vertex &vertex, VertexQueue *buffer = nullptr);
+    void findEulerCycle(const Vertex &vertex);
     explicit operator bool() const;
 };
 

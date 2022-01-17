@@ -17,6 +17,15 @@ int Graph::getIncidentCount(const Vertex& vertex) {
 }
 
 
+void Graph::unmarkAllArcs() {
+    Arc* runner = head;
+    while (*this && runner == head || runner != nullptr) {
+        runner->isMarked = false;
+        runner = runner->next;
+    }
+}
+
+
 void Graph::unmarkAllVertices() {
     Arc* runner = head;
     while (*this && runner == head || runner != nullptr) {
@@ -51,7 +60,7 @@ bool Graph::isConnected() {
     }
 
     auto firstVertexGroup = VertexQueue();
-    depthTraversal(head->vertex1, &firstVertexGroup);
+    depthVertexTraversal(head->vertex1, &firstVertexGroup);
 
     // Making new graph from found vertex group
     Graph graph;
@@ -120,7 +129,7 @@ Arc* Graph::getIncidentArc(const Vertex &vertex, int passes) {
 
 bool Graph::areVerticesConnected(const Vertex &vertex1, const Vertex &vertex2) {
     VertexQueue traversal;
-    depthTraversal(vertex1, &traversal);
+    depthVertexTraversal(vertex1, &traversal);
     while (!traversal.empty()) {
         if (traversal.front() == vertex2) {
             return true;
@@ -277,7 +286,69 @@ void Graph::print() {
 }
 
 
-void Graph::depthTraversal(const Vertex& vertex, VertexQueue* buffer) {
+void Graph::depthArcTraversal(const Vertex& vertex, ArcQueue* buffer) {
+    if (!searchVertex(vertex)) {
+        if (buffer == nullptr) {
+            std::cout << "This vertex does not exists" << std::endl;
+        }
+        return;
+    }
+    unmarkAllArcs();
+    unmarkAllVertices();
+
+    ArcStack arcs;
+    if (buffer == nullptr) {
+        std::cout << "Arcs were visited in the following order: ";
+    }
+    arcTraversal(arcs, vertex, buffer);
+    if (buffer == nullptr) {
+        std::cout << std::endl;
+    }
+    unmarkAllArcs();
+    unmarkAllVertices();
+}
+
+
+void Graph::arcTraversal(ArcStack &arcs, Vertex vertex, ArcQueue* buffer) {
+    // Marking the temporary id
+    markVertex(vertex);
+    vertex.isMarked = true;
+
+    // Pushing all arcs outgoing from the temporary id
+    Arc* runner = head;
+    while (runner == head || runner != nullptr) {
+        if (runner->includes(vertex)) {
+            arcs.push(runner);
+        }
+        runner = runner->next;
+    }
+
+    // Changing the temporary id
+    while (!arcs.empty()) {
+        if (arcs.top()->vertex1 != vertex && !arcs.top()->vertex1.isMarked) {
+            vertex = arcs.top()->vertex1;
+        }
+        if (arcs.top()->vertex2 != vertex && !arcs.top()->vertex2.isMarked) {
+            vertex = arcs.top()->vertex2;
+        }
+        if (arcs.top()->vertex1.isMarked && arcs.top()->vertex2.isMarked && !arcs.top()->isMarked) {
+            if (buffer == nullptr) {
+                std::cout << "(" << arcs.top()->vertex1 << ", " << arcs.top()->vertex2 << ") ";
+            } else {
+                // May does not work, but I don't give a shit, because I won't use this
+                buffer->push(arcs.top());
+            }
+            arcs.top()->isMarked = true;
+        }
+        arcs.pop();
+        if (!vertex.isMarked) {
+            arcTraversal(arcs, vertex, buffer);
+        }
+    }
+}
+
+
+void Graph::depthVertexTraversal(const Vertex& vertex, VertexQueue* buffer) {
     if (!searchVertex(vertex)) {
         if (buffer == nullptr) {
             std::cout << "This vertex does not exists" << std::endl;

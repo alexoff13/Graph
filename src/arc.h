@@ -8,6 +8,7 @@ class Arc {
 public:
     Arc* prev = nullptr;
     Arc* next = nullptr;
+    bool isMarked = false;
     Vertex vertex1;
     Vertex vertex2;
 
